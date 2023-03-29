@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # Install nginx web server and redirect a page
 
-sudo apt-get -y update
-sudo apt-get -y install nginx
+apt-get update -y
+apt-get upgrade -y
+apt-get install nginx -y
 
-sudo chown -R "$USER":"$USER" /var/www/html
-echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
+chown -R "$USER":"$USER" /var/www/html
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
 
 repl_str="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 permanent;"
-sudo sed -i "s/server_name _;/$repl_str/" /etc/nginx/sites-available/default
+sed -i "s/server_name _;/$repl_str/" /etc/nginx/sites-available/default
 
-sudo service restart nginx
+service nginx restart
