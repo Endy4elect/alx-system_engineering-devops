@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
-# Install nginx web server and redirect a page
+# Script that configures a new Ubuntu machine to respect above requirements
 
-apt-get update -y
-apt-get upgrade -y
-apt-get install nginx -y
+sudo apt-get update
+sudo apt-get install -y nginx
 
-chown -R "$USER":"$USER" /var/www/html
-echo "Hello World!" > /var/www/html/index.nginx-debian.html
+echo "Hello World!" | sudo tee /var/www/html/index.html
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.linkedin.com/learning/certificates/322bee6544cdf24bd11e72c375618763fbcfac945f35d99a552826367ca06c38.com permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
-repl_str="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 permanent;"
-sed -i "s/server_name _;/$repl_str/" /etc/nginx/sites-available/default
-
-service nginx restart
+sudo service nginx restart
