@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
-#Configure your Nginx server to have a custom 404 page that contains the string
+# Configure Nginx server so that /redirect_me is redirecting to another page.
+# But the main domain still shows Hello world
 
-sudo apt-get update -y qq && \
-	sudo apt-get install nginx -y
-sudo service nginx start
-sudo ufw allow 'Nginx HTTP'
-sudo chmod -R 755 /var/www
-sudo chown -R "$USER":"$USER" /var/www/html
-echo -e "Hello World!" | > /var/www/html/index.nginx-debian.html
+apt-get update -y && apt-get upgrade -y
+apt-get install nginx -y
+chown -R "$USER":"$USER" /var/www/html
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+line="\\\\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}"
+sed -i "48i $line" /etc/nginx/sites-available/default
 
-sudo sed -i '24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
-
+mkdir -p /var/www/default
 echo "Ceci n'est pas une page" > /var/www/default/404.html
-sudo sed -i '25i\	error_page 404 /error_404.html;' /etc/nginx/sites-available/default
-sudo service nginx restart
+line1="\\\tlocation = /404.html {\n\t\t root /var/www/default;\n\t}"
+sed -i "29i $line1" /etc/nginx/sites-available/default
+line2="\\\terror_page 404 /404.html;"
+sed -i "32i $line2" /etc/nginx/sites-available/default
+
+service nginx restart
