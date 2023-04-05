@@ -12,10 +12,8 @@ sudo mkdir -p /var/www/html
 sudo chmod -R 755 /var/www
 sudo chown -R "$USER":"$USER" /var/www
 
-echo 'Hello World!' > /var/www/html/index.html
-echo "Ceci n'est pas une page" > /var/www/html/error_404.html
-
-sudo cp /etc/nginx/sites-enabled/default nginx-sites-enabled_default.backup
+echo 'Hello World!' |sudo tee  /var/www/html/index.html
+echo "Ceci n'est pas une page" |sudo tee /var/www/html/404.html
 
 string_for_replacement="server_name _;\n\tadd_header X-Served-By \$hostname;\n\trewrite ^\/redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}"
 
