@@ -11,14 +11,13 @@ sudo apt-get -y install haproxy
 # edit config file
 server_config=\
 "
-frontend  endy4elect-frontend
+frontend endy4elect-frontend
         bind *:80
-        mode http
         default_backend endy4elect-backend
 backend endy4elect-backend
         balance roundrobin
-        server 155105-web-01 54.90.55.169 check
-        server 155105-web-02 100.25.24.147 check
+        server 155105-web-01 54.90.55.169:80 check
+        server 155105-web-02 100.25.24.147:80 check
 "
 echo "$server_config" | sudo tee -a /etc/haproxy/haproxy.cfg
 
