@@ -33,10 +33,9 @@ defaults
 	errorfile 503 /etc/haproxy/errors/503.http
 	errorfile 504 /etc/haproxy/errors/504.http
 
-frontend  endy4elect-frontend-http
+frontend endy4elect-frontend-http
         bind *:80
-        mode http
-	http-request set-header X-Forwarded-Proto http
+       	http-request set-header X-Forwarded-Proto http
         default_backend endy4elect-backend
 
 frontend endy4elect-frontend-https
