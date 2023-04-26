@@ -35,6 +35,7 @@ defaults
 
 frontend endy4elect-frontend-http
         bind *:80
+	mode http
         http-request set-header X-Forwarded-Proto http
         default_backend endy4elect-backend
 
