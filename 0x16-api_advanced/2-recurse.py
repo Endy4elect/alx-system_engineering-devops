@@ -1,40 +1,37 @@
 #!/usr/bin/python3
+"""Query Reddit API to determine subreddit sub count
+"""
+
 import requests
-"""
-function that queries reddit api
-"""
 
 
-def recurse(subreddit, hot_list=[]):
+def recurse(subreddit, hot_list=[], next_page=None, count=0):
+    """Request subreddit recursively using pagination
     """
-    recursive function that queries the reddit api and returns a list
-    containing the titles of all hot articles for a given reddit.
-    if no results are found for the given subreddit the function
-    should return none
-    """
-    if type(subreddit) is list:
-        url = "https://api.reddit.com/r/{}?sort=hot".format(subreddit[0])
-        url = "{}&after={}".format(url, subreddit[1])
+    # set custom user-agent
+    user_agent = '0x16-api_advanced-jmajetich'
+    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
+    # if page specified, pass as parameter
+    if next_page:
+        url += '?after={}'.format(next_page)
+    headers = {'User-Agent': user_agent}
+
+    r = requests.get(url, headers=headers, allow_redirects=False)
+
+    if r.status_code != 200:
+        return None
+
+    # load response unit from json
+    data = r.json()['data']
+
+    # extract list of pages
+    posts = data['children']
+    for post in posts:
+        count += 1
+        hot_list.append(post['data']['title'])
+
+    next_page = data['after']
+    if next_page is not None:
+        return recurse(subreddit, hot_list, next_page, count)
     else:
-        url = "https://api.reddit.com/r/{}?sort=hot".format(subreddit)
-        subreddit = [subreddit, ""]
-    header = {'User-Agent': 'CustomClient/1.0'}
-    req = requests.get(url, headers=header, allow_redirects=False)
-    if req.status_code != 200:
-        return (None)
-    req = req.json()
-    if "data" in req:
-        data = req.get("data")
-        if not data.get("children"):
-            return (hot_list)
-        for post in data.get("children"):
-            hot_list += [post.get("data").get("title")]
-        if not data.get("after"):
-            return (hot_list)
-        subreddit[1] = data.get("after")
-        recurse(subreddit, hot_list)
-        if hot_list[-1] is None:
-            del hot_list[-1]
-        return (hot_list)
-    else:
-        return (None)
+        return hot_list
