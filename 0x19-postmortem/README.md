@@ -25,3 +25,6 @@ The corrective and preventative measures provide a list of tasks to address the 
 
 Conclusion
 A postmortem is a critical process for improving the resilience and reliability of software systems. By conducting a thorough analysis of incidents and implementing corrective and preventative measures, teams can ensure that similar incidents are avoided in the future.
+
+## Author
+* **Nnamdi Udeh** - [Endy4elect](https://github.com/Endy4elect)
