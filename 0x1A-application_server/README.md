@@ -19,3 +19,6 @@ Your web infrastructure is already serving web pages via Nginx that you installe
 
 ## Gunicorn
 To bind Gunicorn to different ports for different applications, you'll need to create two systemd services for both of them.
+
+## Author
+* **Nnamdi Udeh** - [Endy4elect](https://github.com/Endy4elect)
